@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Blog Post</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+{% if user.is_authenticated %}
+    <p>
+        Welcome, {{ user.username }}!
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </p>
+    <hr>
+    <h1>Create a New Blog Post</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Publish</button>
+    </form>
+    <p><a href="{% url 'home' %}">Back to Home</a></p>
+{% else %}
+    <p>You must be logged in to create a post. <a href="{% url 'login' %}">Login here.</a></p>
+{% endif %}
+</body>
+</html>

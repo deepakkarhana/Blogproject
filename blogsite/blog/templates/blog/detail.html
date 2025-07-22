@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<!-- Navigation -->
+{% if user.is_authenticated %}
+    <p>
+        Welcome, {{ user.username }}!
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </p>
+{% else %}
+    <p>
+        <a href="{% url 'login' %}">Login</a> |
+        <a href="{% url 'signup' %}">Sign Up</a>
+    </p>
+{% endif %}
+<hr>
+
+<main>
+    <!-- Blog Post Detail -->
+    <p><a href="{% url 'home' %}">← Back to Home</a></p>
+
+    <h1>{{ post.title }}</h1>
+    <p><small>By {{ post.author.username }} on {{ post.created_at|date:"F d, Y" }}</small></p>
+    <hr>
+    <p>{{ post.content }}</p>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Blog Homepage</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<!-- Navigation -->
+{% if user.is_authenticated %}
+    <p>
+        Welcome, {{ user.username }}!
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </p>
+{% else %}
+    <p>
+        <a href="{% url 'login' %}">Login</a> |
+        <a href="{% url 'signup' %}">Sign Up</a>
+    </p>
+{% endif %}
+<hr>
+
+{% if user.is_authenticated %}
+    <p><a href="{% url 'create_post' %}">+ New Blog Post</a></p>
+{% endif %}
+
+<h1>Welcome to My Blog</h1>
+
+<!-- Blog Posts List -->
+{% for post in posts %}
+    <article>
+        <h2>{{ post.title }}</h2>
+        <p><small>By {{ post.author.username }} on {{ post.created_at|date:"F d, Y" }}</small></p>
+        <p>{{ post.summary }}</p>
+        <a href="{% url 'post_detail' post.id %}">Read More</a>
+    </article>
+    <hr>
+{% empty %}
+    <p>No blog posts have been published yet.</p>
+{% endfor %}
+
+</body>
+</html>
